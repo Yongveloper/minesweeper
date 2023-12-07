@@ -5,7 +5,9 @@ import { RootState } from '../../store/store';
 import { GAME_STATUS } from '../../types';
 
 function Header() {
-  const gameLevel = useSelector((state: RootState) => state.game.gameLevel);
+  const gameLevel = useSelector(
+    (state: RootState) => state.game.gameLevel.level
+  );
   const gameStatus = useSelector((state: RootState) => state.game.gameStatus);
   const dispatch = useDispatch();
 
@@ -13,7 +15,7 @@ function Header() {
     if (gameStatus === GAME_STATUS.IDLE) {
       return;
     }
-    dispatch(resetGame(gameLevel));
+    dispatch(resetGame({ level: gameLevel }));
   };
 
   return (

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store/store';
-import { CELL_STATUS, GAME_STATUS, LEVELS } from '../../types';
+import { CELL_STATUS, GAME_STATUS } from '../../types';
 import { openCell, startGame } from '../../store/gameSlice';
 
 const Container = styled.div``;
@@ -21,12 +21,15 @@ const Row = styled.div`
 function Board() {
   const board = useSelector((state: RootState) => state.game.board);
   const gameStatus = useSelector((state: RootState) => state.game.gameStatus);
+  const gameLevel = useSelector(
+    (state: RootState) => state.game.gameLevel.level
+  );
   const dispatch = useDispatch();
 
   const handleClickCell = (rowIndex: number, cellIndex: number) => {
     if (gameStatus === GAME_STATUS.IDLE) {
       dispatch(
-        startGame({ level: LEVELS.BEGINNER, row: rowIndex, column: cellIndex })
+        startGame({ level: gameLevel, row: rowIndex, column: cellIndex })
       );
     } else {
       dispatch(openCell({ row: rowIndex, column: cellIndex }));
