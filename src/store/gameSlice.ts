@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { GAME_STATUS, GameState, LEVELS } from '../types';
+import { CELL_STATUS, GAME_STATUS, GameState, LEVELS } from '../types';
 import { createBoard, updateCellStatus } from '../utils';
 
 const initialState: GameState = {
@@ -83,9 +83,16 @@ const gameSlice = createSlice({
       const { row, column } = action.payload;
       if (state.board[row][column].mine) {
         state.gameStatus = GAME_STATUS.LOST;
-        return;
+        state.board.forEach((row) => {
+          row.forEach((cell) => {
+            if (cell.status === CELL_STATUS.HIDDEN) {
+              cell.status = CELL_STATUS.VISIBLE;
+            }
+          });
+        });
+      } else {
+        state.board = updateCellStatus(state.board, { row, column });
       }
-      state.board = updateCellStatus(state.board, { row, column });
     },
   },
 });

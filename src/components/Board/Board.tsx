@@ -6,9 +6,12 @@ import { openCell, setBoard } from '../../store/gameSlice';
 
 const Container = styled.div``;
 
-const Cell = styled.button<{ $isOpen: boolean }>`
+const Cell = styled.button<{ $isOpen: boolean; $isMine: boolean }>`
   background-color: ${({ $isOpen }) => ($isOpen ? '#ecf0f1' : '#95a5a6')};
+  background-color: ${({ $isOpen, $isMine }) =>
+    $isOpen && $isMine && '#e74c3c'};
   border-width: ${({ $isOpen }) => $isOpen && 'none'};
+  font-size: 16px;
 `;
 
 const Row = styled.div`
@@ -39,9 +42,11 @@ function Board() {
           {row.map((cell, j) => (
             <Cell
               $isOpen={cell.status === CELL_STATUS.VISIBLE}
+              $isMine={cell.mine}
               key={j}
               onClick={() => handleClickCell(i, j)}
             >
+              {cell.status === CELL_STATUS.VISIBLE && cell.mine && '💣'}
               {cell.status === CELL_STATUS.VISIBLE &&
                 cell.count > 0 &&
                 cell.count}
