@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
-import { useAppSelector } from '../../hooks/useAppSelector';
-import { CELL_STATUS, GAME_STATUS } from '../../types';
-import { openCell, startGame, toggleFlag } from '../../store/gameSlice';
+import { useAppSelector } from '@hooks/useAppSelector';
+import { CELL_STATUS, GAME_STATUS } from '@/types';
+import { openCell, startGame, toggleFlag } from '@store/gameSlice';
 import * as B from './Board.styles';
 
 function Board() {

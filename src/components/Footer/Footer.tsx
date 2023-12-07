@@ -1,9 +1,9 @@
 import { useDispatch } from 'react-redux';
 import * as F from './Footer.styles';
-import { resetGame } from '../../store/gameSlice';
-import { LEVELS } from '../../types';
-import Modal from '../Modal';
-import { useModal } from '../../hooks/useModal';
+import { resetGame } from '@store/gameSlice';
+import { LEVELS } from '@/types';
+import Modal from './Modal';
+import { useModal } from '@hooks/useModal';
 
 // - Beginner (8X8) 지뢰 10개, Intermediate (16X16) 지뢰 40개, Expert (32X16) 지뢰 100개
 // - Custom (가로, 세로, 지뢰 수 조정 가능)

@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useAppSelector } from '../../hooks/useAppSelector';
+import { useAppSelector } from '@hooks/useAppSelector';
 import * as H from './Header.styles';
-import { resetGame } from '../../store/gameSlice';
-import { GAME_STATUS, LEVELS } from '../../types';
+import { resetGame } from '@store/gameSlice';
+import { GAME_STATUS, LEVELS } from '@/types';
 
 function Header() {
   const [timer, setTimer] = useState(0);

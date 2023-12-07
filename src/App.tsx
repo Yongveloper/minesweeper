@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import Header from './components/Header';
-import Board from './components/Board/Board';
-import Footer from './components/Footer';
+import Header from '@components/Header';
+import Board from '@components/Board/Board';
+import Footer from '@components/Footer';
 
 const Container = styled.div`
   display: flex;
