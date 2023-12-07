@@ -13,15 +13,20 @@ import {
   checkWin,
 } from '../utils';
 
+const lsStorageGameLevel = localStorage.getItem('gameLevel');
+const initialGameLevel = lsStorageGameLevel
+  ? JSON.parse(lsStorageGameLevel)
+  : {
+      level: LEVELS.BEGINNER,
+      rows: 8,
+      columns: 8,
+      mines: 10,
+    };
+
 const initialState: GameState = {
-  board: initializeBoard(8, 8),
+  board: initializeBoard(initialGameLevel.rows, initialGameLevel.columns),
   gameStatus: GAME_STATUS.IDLE,
-  gameLevel: {
-    level: LEVELS.BEGINNER,
-    rows: 8,
-    columns: 8,
-    mines: 10,
-  },
+  gameLevel: initialGameLevel,
 };
 const gameSlice = createSlice({
   name: 'game',
@@ -76,6 +81,7 @@ const gameSlice = createSlice({
           break;
       }
       state.gameStatus = GAME_STATUS.IDLE;
+      localStorage.setItem('gameLevel', JSON.stringify(state.gameLevel));
     },
     startGame: (
       state,
