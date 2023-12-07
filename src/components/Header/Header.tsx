@@ -23,11 +23,23 @@ function Header() {
     }
   };
 
+  const getEmoji = () => {
+    switch (gameStatus) {
+      case GAME_STATUS.IDLE:
+      case GAME_STATUS.RUNNING:
+        return '😐';
+      case GAME_STATUS.LOST:
+        return '😵';
+      case GAME_STATUS.WON:
+        return '🤩';
+    }
+  };
+
   return (
     <H.Container>
       <div className="mine-count">000</div>
       <button className="reset-button" onClick={handleResetGame}>
-        😊
+        {getEmoji()}
       </button>
       <div className="time">000</div>
     </H.Container>

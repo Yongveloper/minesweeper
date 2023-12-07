@@ -1,22 +1,8 @@
-import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../hooks/useAppSelector';
 import { CELL_STATUS, GAME_STATUS } from '../../types';
 import { openCell, startGame } from '../../store/gameSlice';
-
-const Container = styled.div``;
-
-const Cell = styled.button<{ $isOpen: boolean; $isMine: boolean }>`
-  background-color: ${({ $isOpen }) => ($isOpen ? '#ecf0f1' : '#95a5a6')};
-  background-color: ${({ $isOpen, $isMine }) =>
-    $isOpen && $isMine && '#e74c3c'};
-  border-width: ${({ $isOpen }) => $isOpen && 'none'};
-  font-size: 16px;
-`;
-
-const Row = styled.div`
-  display: flex;
-`;
+import * as B from './Board.styles';
 
 function Board() {
   const board = useAppSelector((state) => state.game.board);
@@ -32,11 +18,11 @@ function Board() {
   };
 
   return (
-    <Container>
+    <B.Container>
       {board.map((row, i) => (
-        <Row key={i}>
+        <B.Row key={i}>
           {row.map((cell, j) => (
-            <Cell
+            <B.Cell
               $isOpen={cell.status === CELL_STATUS.VISIBLE}
               $isMine={cell.mine}
               key={j}
@@ -46,11 +32,11 @@ function Board() {
               {cell.status === CELL_STATUS.VISIBLE &&
                 cell.count > 0 &&
                 cell.count}
-            </Cell>
+            </B.Cell>
           ))}
-        </Row>
+        </B.Row>
       ))}
-    </Container>
+    </B.Container>
   );
 }
 

@@ -145,3 +145,17 @@ export const initializeBoard = (rows: number, columns: number): Cell[][] => {
     )
   );
 };
+
+export const checkWin = (board: Cell[][]): boolean => {
+  let win = true;
+
+  board.forEach((row) => {
+    row.forEach((cell) => {
+      if (!cell.mine && cell.status === CELL_STATUS.HIDDEN) {
+        win = false;
+      }
+    });
+  });
+
+  return win;
+};

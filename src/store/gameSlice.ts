@@ -1,14 +1,21 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CELL_STATUS, GAME_STATUS, GameState, LEVELS } from '../types';
+import {
+  CELL_STATUS,
+  GAME_STATUS,
+  GameState,
+  GameStatus,
+  LEVELS,
+} from '../types';
 import {
   setBoardMinesAndCounts,
   initializeBoard,
   updateCellStatus,
+  checkWin,
 } from '../utils';
 
 const initialState: GameState = {
   board: initializeBoard(8, 8),
-  gameStatus: 'idle',
+  gameStatus: GAME_STATUS.IDLE,
   gameLevel: {
     level: LEVELS.BEGINNER,
     rows: 8,
@@ -58,7 +65,6 @@ const gameSlice = createSlice({
             mines: 100,
           };
           break;
-        // Todo
         case LEVELS.CUSTOM:
           state.board = initializeBoard(rows!, columns!);
           state.gameLevel = {
@@ -86,13 +92,25 @@ const gameSlice = createSlice({
       );
       state.gameStatus = GAME_STATUS.RUNNING;
       state.board = updateCellStatus(state.board, { row, column });
+      if (checkWin(state.board)) {
+        state.gameStatus = GAME_STATUS.WON;
+      }
     },
     openCell: (
       state,
       action: PayloadAction<{ row: number; column: number }>
     ) => {
       const { row, column } = action.payload;
-      if (state.board[row][column].mine) {
+      const cell = state.board[row][column];
+
+      if (
+        state.gameStatus !== GAME_STATUS.RUNNING ||
+        cell.status === CELL_STATUS.VISIBLE
+      ) {
+        return;
+      }
+
+      if (cell.mine) {
         state.gameStatus = GAME_STATUS.LOST;
         state.board.forEach((row) => {
           row.forEach((cell) => {
@@ -101,13 +119,22 @@ const gameSlice = createSlice({
             }
           });
         });
-      } else {
-        state.board = updateCellStatus(state.board, { row, column });
+        return;
       }
+
+      state.board = updateCellStatus(state.board, { row, column });
+
+      if (checkWin(state.board)) {
+        state.gameStatus = GAME_STATUS.WON;
+      }
+    },
+    setGameStatus: (state: GameState, action: PayloadAction<GameStatus>) => {
+      state.gameStatus = action.payload;
     },
   },
 });
 
-export const { resetGame, startGame, openCell } = gameSlice.actions;
+export const { resetGame, startGame, openCell, setGameStatus } =
+  gameSlice.actions;
 
 export default gameSlice.reducer;
