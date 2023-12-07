@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Header from './components/Header';
-import Board from './components/Board';
+import Board from './components/Board/Board';
+import Footer from './components/Footer';
 
 const Container = styled.div`
   display: flex;
@@ -16,10 +17,13 @@ const Container = styled.div`
 
 function App() {
   return (
-    <Container>
-      <Header />
-      <Board />
-    </Container>
+    <>
+      <Container>
+        <Header />
+        <Board />
+      </Container>
+      <Footer />
+    </>
   );
 }
 
