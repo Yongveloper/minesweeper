@@ -5,7 +5,9 @@ import { resetGame } from '../../store/gameSlice';
 import { GAME_STATUS } from '../../types';
 
 function Header() {
-  const gameLevel = useAppSelector((state) => state.game.gameLevel.level);
+  const { level, rows, columns, mines } = useAppSelector(
+    (state) => state.game.gameLevel
+  );
   const gameStatus = useAppSelector((state) => state.game.gameStatus);
   const dispatch = useDispatch();
 
@@ -13,7 +15,12 @@ function Header() {
     if (gameStatus === GAME_STATUS.IDLE) {
       return;
     }
-    dispatch(resetGame({ level: gameLevel }));
+
+    if (level === 'CUSTOM') {
+      dispatch(resetGame({ level, rows, columns, mines }));
+    } else {
+      dispatch(resetGame({ level }));
+    }
   };
 
   return (

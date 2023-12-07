@@ -21,20 +21,15 @@ const Row = styled.div`
 function Board() {
   const board = useAppSelector((state) => state.game.board);
   const gameStatus = useAppSelector((state) => state.game.gameStatus);
-  const gameLevel = useAppSelector((state) => state.game.gameLevel.level);
   const dispatch = useDispatch();
 
   const handleClickCell = (rowIndex: number, cellIndex: number) => {
     if (gameStatus === GAME_STATUS.IDLE) {
-      dispatch(
-        startGame({ level: gameLevel, row: rowIndex, column: cellIndex })
-      );
+      dispatch(startGame({ row: rowIndex, column: cellIndex }));
     } else {
       dispatch(openCell({ row: rowIndex, column: cellIndex }));
     }
   };
-
-  console.log(board);
 
   return (
     <Container>

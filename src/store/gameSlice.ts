@@ -20,8 +20,16 @@ const gameSlice = createSlice({
   name: 'game',
   initialState,
   reducers: {
-    resetGame: (state: GameState, action: PayloadAction<{ level: string }>) => {
-      const { level } = action.payload;
+    resetGame: (
+      state: GameState,
+      action: PayloadAction<{
+        level: string;
+        rows?: number;
+        columns?: number;
+        mines?: number;
+      }>
+    ) => {
+      const { level, rows, columns, mines } = action.payload;
       switch (level) {
         case LEVELS.BEGINNER:
           state.board = initializeBoard(8, 8);
@@ -52,11 +60,12 @@ const gameSlice = createSlice({
           break;
         // Todo
         case LEVELS.CUSTOM:
+          state.board = initializeBoard(rows!, columns!);
           state.gameLevel = {
             level: LEVELS.CUSTOM,
-            rows: 1,
-            columns: 1,
-            mines: 1,
+            rows: rows!,
+            columns: columns!,
+            mines: mines!,
           };
           break;
       }
@@ -64,45 +73,12 @@ const gameSlice = createSlice({
     },
     startGame: (
       state,
-      action: PayloadAction<{ level: string; row: number; column: number }>
+      action: PayloadAction<{
+        row: number;
+        column: number;
+      }>
     ) => {
-      const { level, row, column } = action.payload;
-      switch (level) {
-        case LEVELS.BEGINNER:
-          state.gameLevel = {
-            level: LEVELS.BEGINNER,
-            rows: 8,
-            columns: 8,
-            mines: 10,
-          };
-          break;
-        case LEVELS.INTERMEDIATE:
-          state.gameLevel = {
-            level: LEVELS.INTERMEDIATE,
-            rows: 16,
-            columns: 16,
-            mines: 40,
-          };
-          break;
-        case LEVELS.EXPERT:
-          state.gameLevel = {
-            level: LEVELS.EXPERT,
-            rows: 16,
-            columns: 32,
-            mines: 100,
-          };
-          break;
-        // Todo
-        case LEVELS.CUSTOM:
-          state.gameLevel = {
-            level: LEVELS.CUSTOM,
-            rows: 1,
-            columns: 1,
-            mines: 1,
-          };
-          break;
-      }
-
+      const { row, column } = action.payload;
       state.board = setBoardMinesAndCounts(
         { row, column },
         state.board,

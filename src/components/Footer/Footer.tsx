@@ -17,8 +17,16 @@ function Footer() {
     dispatch(resetGame({ level }));
   };
 
-  const handleCustomLevelButton = () => {
-    open();
+  const handleCustomLevel = ({
+    rows,
+    columns,
+    mines,
+  }: {
+    rows: number;
+    columns: number;
+    mines: number;
+  }) => {
+    dispatch(resetGame({ level: LEVELS.CUSTOM, rows, columns, mines }));
   };
 
   return (
@@ -43,11 +51,11 @@ function Footer() {
         >
           전문가
         </button>
-        <button className="custom-btn" onClick={handleCustomLevelButton}>
+        <button className="custom-btn" onClick={open}>
           직접 설정
         </button>
       </F.ButtonContainer>
-      {isOpen && <Modal close={close} />}
+      {isOpen && <Modal close={close} handleCustomLevel={handleCustomLevel} />}
     </F.Container>
   );
 }

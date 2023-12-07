@@ -3,46 +3,56 @@ import * as M from './Modal.styles';
 
 interface IModalProps {
   close: () => void;
+  handleCustomLevel: ({
+    rows,
+    columns,
+    mines,
+  }: {
+    rows: number;
+    columns: number;
+    mines: number;
+  }) => void;
 }
 
-function Modal({ close }: IModalProps) {
-  const [row, setRow] = useState(8);
-  const [column, setColumn] = useState(8);
-  const [mine, setMine] = useState(10);
+function Modal({ close, handleCustomLevel }: IModalProps) {
+  const [rows, setRows] = useState(8);
+  const [columns, setColumns] = useState(8);
+  const [mines, setMines] = useState(10);
   const [isError, setIsError] = useState(false);
 
   const handleChangeRow = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value);
-    setRow(value);
+    setRows(value);
   };
 
   const handleChangeColumn = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value);
-    setColumn(value);
+    setColumns(value);
   };
 
   const handleChangeMine = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value);
-    setMine(value);
+    setMines(value);
   };
 
   const handleComplete = () => {
     close();
+    handleCustomLevel({ rows, columns, mines });
   };
 
   useEffect(() => {
     if (
-      row < 8 ||
-      row > 100 ||
-      column < 8 ||
-      column > 100 ||
-      mine > (row * column) / 3
+      rows < 8 ||
+      rows > 100 ||
+      columns < 8 ||
+      columns > 100 ||
+      mines > (rows * columns) / 3
     ) {
       setIsError(true);
     } else {
       setIsError(false);
     }
-  }, [row, column, mine]);
+  }, [rows, columns, mines]);
 
   return (
     <M.Background onClick={close}>
@@ -55,15 +65,19 @@ function Modal({ close }: IModalProps) {
         <M.ContentsContainer>
           <div className="input-container">
             <span>행:</span>
-            <input type="number" value={row} onChange={handleChangeRow} />
+            <input type="number" value={rows} onChange={handleChangeRow} />
           </div>
           <div className="input-container">
             <span>열:</span>
-            <input type="number" value={column} onChange={handleChangeColumn} />
+            <input
+              type="number"
+              value={columns}
+              onChange={handleChangeColumn}
+            />
           </div>
           <div className="input-container">
             <span>지뢰 갯수:</span>
-            <input type="number" value={mine} onChange={handleChangeMine} />
+            <input type="number" value={mines} onChange={handleChangeMine} />
           </div>
           <M.Button
             onClick={handleComplete}
