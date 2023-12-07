@@ -69,25 +69,12 @@ const calculateCounts = (board: Cell[][]): Cell[][] => {
   return board;
 };
 
-export const createBoard = (
-  rows: number,
-  columns: number,
-  mines: number,
-  firstClick: { row: number; column: number }
+export const setBoardMinesAndCounts = (
+  clicked: { row: number; column: number },
+  board: Cell[][],
+  mines: number
 ): Cell[][] => {
-  let board: Cell[][] = Array.from({ length: rows }, () =>
-    Array.from(
-      { length: columns },
-      () =>
-        ({
-          status: 'hidden',
-          mine: false,
-          count: 0,
-        })!
-    )
-  );
-
-  board = setMines(board, mines, firstClick);
+  board = setMines(board, mines, clicked);
   board = calculateCounts(board);
 
   return board;
@@ -143,4 +130,18 @@ export const updateCellStatus = (
   }
 
   return openEmptyCells(board, { row, column });
+};
+
+export const initializeBoard = (rows: number, columns: number): Cell[][] => {
+  return Array.from({ length: rows }, () =>
+    Array.from(
+      { length: columns },
+      () =>
+        ({
+          status: 'hidden',
+          mine: false,
+          count: 0,
+        })!
+    )
+  );
 };

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store/store';
 import { CELL_STATUS, GAME_STATUS, LEVELS } from '../../types';
-import { openCell, setBoard } from '../../store/gameSlice';
+import { openCell, startGame } from '../../store/gameSlice';
 
 const Container = styled.div``;
 
@@ -26,7 +26,7 @@ function Board() {
   const handleClickCell = (rowIndex: number, cellIndex: number) => {
     if (gameStatus === GAME_STATUS.IDLE) {
       dispatch(
-        setBoard({ level: LEVELS.BEGINNER, row: rowIndex, column: cellIndex })
+        startGame({ level: LEVELS.BEGINNER, row: rowIndex, column: cellIndex })
       );
     } else {
       dispatch(openCell({ row: rowIndex, column: cellIndex }));
