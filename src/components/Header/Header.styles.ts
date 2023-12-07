@@ -7,4 +7,9 @@ export const Container = styled.div`
   border: 5px solid #b2bec3;
   padding: 10px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+
+  .reset-button {
+    font-size: 24px;
+    padding: 18px;
+  }
 `;

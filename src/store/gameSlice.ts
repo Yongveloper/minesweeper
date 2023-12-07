@@ -24,6 +24,7 @@ const gameSlice = createSlice({
       const { level } = action.payload;
       switch (level) {
         case LEVELS.BEGINNER:
+          state.board = initializeBoard(8, 8);
           state.gameLevel = {
             level: LEVELS.BEGINNER,
             rows: 8,
@@ -32,6 +33,7 @@ const gameSlice = createSlice({
           };
           break;
         case LEVELS.INTERMEDIATE:
+          state.board = initializeBoard(16, 16);
           state.gameLevel = {
             level: LEVELS.INTERMEDIATE,
             rows: 16,
@@ -40,6 +42,7 @@ const gameSlice = createSlice({
           };
           break;
         case LEVELS.EXPERT:
+          state.board = initializeBoard(16, 32);
           state.gameLevel = {
             level: LEVELS.EXPERT,
             rows: 16,
@@ -129,6 +132,6 @@ const gameSlice = createSlice({
   },
 });
 
-export const { startGame, openCell } = gameSlice.actions;
+export const { resetGame, startGame, openCell } = gameSlice.actions;
 
 export default gameSlice.reducer;
