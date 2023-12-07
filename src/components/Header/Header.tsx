@@ -1,10 +1,12 @@
+import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../hooks/useAppSelector';
 import * as H from './Header.styles';
 import { resetGame } from '../../store/gameSlice';
-import { GAME_STATUS } from '../../types';
+import { GAME_STATUS, LEVELS } from '../../types';
 
 function Header() {
+  const [timer, setTimer] = useState(0);
   const { level, rows, columns, mines } = useAppSelector(
     (state) => state.game.gameLevel
   );
@@ -16,7 +18,7 @@ function Header() {
       return;
     }
 
-    if (level === 'CUSTOM') {
+    if (level === LEVELS.CUSTOM) {
       dispatch(resetGame({ level, rows, columns, mines }));
     } else {
       dispatch(resetGame({ level }));
@@ -35,13 +37,29 @@ function Header() {
     }
   };
 
+  useEffect(() => {
+    let interval: number | undefined;
+    if (gameStatus === GAME_STATUS.RUNNING) {
+      interval = window.setInterval(() => {
+        setTimer((timer) => timer + 1);
+      }, 1000);
+    } else {
+      clearInterval(interval);
+    }
+
+    if (gameStatus === GAME_STATUS.IDLE) {
+      setTimer(0);
+    }
+
+    return () => clearInterval(interval);
+  }, [gameStatus, timer]);
+
   return (
     <H.Container>
-      <div className="mine-count">000</div>
       <button className="reset-button" onClick={handleResetGame}>
         {getEmoji()}
       </button>
-      <div className="time">000</div>
+      <div className="timer">진행 시간: {String(timer).padStart(3, '0')}</div>
     </H.Container>
   );
 }
