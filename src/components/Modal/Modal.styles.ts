@@ -17,7 +17,6 @@ export const Background = styled.div`
 export const Card = styled.div`
   min-width: 400px;
   min-height: 200px;
-  z-index: 999;
   background: white;
   border-radius: 10px;
   display: flex;
@@ -67,16 +66,18 @@ export const ContentsContainer = styled.div`
       width: 100px;
     }
   }
+`;
 
-  button {
-    width: 240px;
-    padding: 4px;
-    font-size: 16px;
-    padding: 18px;
-    background: #3498db;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    margin-top: 20px;
-  }
+export const Button = styled.button<{ $isDisabled: boolean }>`
+  background-color: ${({ $isDisabled }) =>
+    $isDisabled ? '#b2bec3' : '#3498db'};
+  cursor: ${({ $isDisabled }) => ($isDisabled ? 'not-allowed' : 'pointer')};
+  width: 240px;
+  padding: 4px;
+  font-size: 16px;
+  padding: 18px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin-top: 20px;
 `;

@@ -3,16 +3,22 @@ import * as F from './Footer.styles';
 import { resetGame } from '../../store/gameSlice';
 import { LEVELS } from '../../types';
 import Modal from '../Modal';
+import { useModal } from '../../hooks/useModal';
 
 // - Beginner (8X8) 지뢰 10개, Intermediate (16X16) 지뢰 40개, Expert (32X16) 지뢰 100개
 // - Custom (가로, 세로, 지뢰 수 조정 가능)
 //     - 설정 가능한 가로, 세로는 최대 100 x 100이며, 지뢰수는 격자칸 수의 1/3 이하로 설정 가능합니다.
 
 function Footer() {
+  const { isOpen, open, close } = useModal();
   const dispatch = useDispatch();
 
   const handleChangeLevel = (level: string) => {
     dispatch(resetGame({ level }));
+  };
+
+  const handleCustomLevelButton = () => {
+    open();
   };
 
   return (
@@ -37,14 +43,11 @@ function Footer() {
         >
           전문가
         </button>
-        <button
-          className="custom-btn"
-          onClick={() => handleChangeLevel(LEVELS.CUSTOM)}
-        >
+        <button className="custom-btn" onClick={handleCustomLevelButton}>
           직접 설정
         </button>
       </F.ButtonContainer>
-      <Modal />
+      {isOpen && <Modal close={close} />}
     </F.Container>
   );
 }
