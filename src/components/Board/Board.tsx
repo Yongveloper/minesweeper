@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../hooks/useAppSelector';
 import { CELL_STATUS, GAME_STATUS } from '../../types';
-import { openCell, startGame } from '../../store/gameSlice';
+import { openCell, startGame, toggleFlag } from '../../store/gameSlice';
 import * as B from './Board.styles';
 
 function Board() {
@@ -17,6 +17,15 @@ function Board() {
     }
   };
 
+  const handleRightClickCell = (
+    e: React.MouseEvent,
+    rowIndex: number,
+    cellIndex: number
+  ) => {
+    e.preventDefault();
+    dispatch(toggleFlag({ row: rowIndex, column: cellIndex }));
+  };
+
   return (
     <B.Container>
       {board.map((row, i) => (
@@ -27,7 +36,9 @@ function Board() {
               $isMine={cell.mine}
               key={j}
               onClick={() => handleClickCell(i, j)}
+              onContextMenu={(e) => handleRightClickCell(e, i, j)}
             >
+              {cell.status === CELL_STATUS.FLAGGED && '🚩'}
               {cell.status === CELL_STATUS.VISIBLE && cell.mine && '💣'}
               {cell.status === CELL_STATUS.VISIBLE &&
                 cell.count > 0 &&

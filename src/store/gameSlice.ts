@@ -105,7 +105,8 @@ const gameSlice = createSlice({
 
       if (
         state.gameStatus !== GAME_STATUS.RUNNING ||
-        cell.status === CELL_STATUS.VISIBLE
+        cell.status === CELL_STATUS.VISIBLE ||
+        cell.status === CELL_STATUS.FLAGGED
       ) {
         return;
       }
@@ -114,7 +115,10 @@ const gameSlice = createSlice({
         state.gameStatus = GAME_STATUS.LOST;
         state.board.forEach((row) => {
           row.forEach((cell) => {
-            if (cell.status === CELL_STATUS.HIDDEN) {
+            if (
+              cell.status === CELL_STATUS.HIDDEN ||
+              cell.status === CELL_STATUS.FLAGGED
+            ) {
               cell.status = CELL_STATUS.VISIBLE;
             }
           });
@@ -131,10 +135,26 @@ const gameSlice = createSlice({
     setGameStatus: (state: GameState, action: PayloadAction<GameStatus>) => {
       state.gameStatus = action.payload;
     },
+    toggleFlag: (
+      state,
+      action: PayloadAction<{ row: number; column: number }>
+    ) => {
+      const { row, column } = action.payload;
+      const cell = state.board[row][column];
+
+      if (cell.status === CELL_STATUS.VISIBLE) {
+        return;
+      }
+
+      cell.status =
+        cell.status === CELL_STATUS.FLAGGED
+          ? CELL_STATUS.HIDDEN
+          : CELL_STATUS.FLAGGED;
+    },
   },
 });
 
-export const { resetGame, startGame, openCell, setGameStatus } =
+export const { resetGame, startGame, openCell, setGameStatus, toggleFlag } =
   gameSlice.actions;
 
 export default gameSlice.reducer;
