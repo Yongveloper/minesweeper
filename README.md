@@ -1,30 +1,77 @@
-# React + TypeScript + Vite
+## 프로젝트 개요
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+클라썸 과제 2 - 지뢰찾기
 
-Currently, two official plugins are available:
+- 배포: https://minesweeper-yhj.netlify.app/
+  - 공개 저장소에 업로드 하면 안 된다는 주의사항이 있어서 공개 저장소 연결 없이 정적 사이트를 간편하게 배포할 수 있는 **Netlify Drop**을 이용해 배포했습니다.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 필수 스택 외 사용 라이브러리
 
-## Expanding the ESLint configuration
+- styled-components
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## 기능 구현
 
-- Configure the top-level `parserOptions` property like this:
+### 필수 구현 사항 및 완료
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+- 지뢰 찾기 기본 기능
+  - 게임 시작, 승리, 패배
+  - 게임 초기화
+  - 주변 지뢰 갯수 표시
+  - 빈 공간 클릭 시 주변 탐색
+  - 난이도 설정
+  - 우클릭 깃발
+  - 타이머
+
+### 추가 구현 사항
+
+- 브라우저 새고로침 시 난이도 유지
+  - `localStorage` 활용했습니다.
+    - 게임 초기 상태 `localStorage`에서 가져오기
+    - 게임 `resetGame` 리듀서 실행 시 `localStorage`에 저장
+
+## 프로젝트 폴더 구조
+
+```
+src/
+├── components/
+│   ├── Board/
+│   ├── Footer/
+│   ├── Header/
+│   └── Modal/
+├── hooks/
+├── store/
+├── styles/
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- `components/`: 프로젝트의 React 컴포넌트들이 위치한 폴더입니다.
+  - `Board/`: Cell들과 관련된 컴포넌트들이 위치한 폴더입니다.
+  - `Footer`: 하단 영역과 관련된 컴포넌트들이 위치한 폴더 입니다.
+  - `Header`: 상단 영역과 관련된 컴포넌트들이 위치한 폴더 입니다.
+- `hooks/`: 커스텀 훅들이 위치한 폴더입니다.
+- `store/`: Redux store와 관련된 파일들이 위치한 폴더입니다.
+- `styles/`: 전역 스타일과 관련된 파일들이 위치한 폴더입니다.
+
+## 커밋 컨벤션
+
+다음과 같은 커밋 컨벤션을 사용했습니다.
+
+- `feat`: 새로운 기능을 추가할 때 사용합니다.
+- `refactor`: 코드를 개선하거나 리팩토링할 때 사용합니다.
+- `Add`: 새로운 패키지를 설치할 때 사용합니다.
+- `fix`: 오류나 경고를 해결할 때 사용합니다.
+- `style`: 기능에 변화가 없는 경우에 사용합니다. 예를 들어, 폴더 구조를 변경하거나, 스타일을 수정하는 경우입니다.
+- `doc`: 문서를 수정하는 경우에 사용합니다.
+
+## 설치 및 실행 방법
+
+### 설치
+
+```
+npm i
+```
+
+### 실행
+
+```
+npm run dev
+```
