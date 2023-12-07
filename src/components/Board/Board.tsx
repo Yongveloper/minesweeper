@@ -2,12 +2,13 @@ import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store/store';
 import { CELL_STATUS, GAME_STATUS, LEVELS } from '../../types';
-import { setBoard } from '../../store/gameSlice';
+import { openCell, setBoard } from '../../store/gameSlice';
 
 const Container = styled.div``;
 
 const Cell = styled.button<{ $isOpen: boolean }>`
-  background-color: ${({ $isOpen }) => ($isOpen ? '#ecf0f1' : 'inherit')};
+  background-color: ${({ $isOpen }) => ($isOpen ? '#ecf0f1' : '#95a5a6')};
+  border-width: ${({ $isOpen }) => $isOpen && 'none'};
 `;
 
 const Row = styled.div`
@@ -24,8 +25,11 @@ function Board() {
       dispatch(
         setBoard({ level: LEVELS.BEGINNER, row: rowIndex, column: cellIndex })
       );
+    } else {
+      dispatch(openCell({ row: rowIndex, column: cellIndex }));
     }
   };
+
   console.log(board);
 
   return (
@@ -38,7 +42,9 @@ function Board() {
               key={j}
               onClick={() => handleClickCell(i, j)}
             >
-              {cell.mine ? '💣' : cell.count}
+              {cell.status === CELL_STATUS.VISIBLE &&
+                cell.count > 0 &&
+                cell.count}
             </Cell>
           ))}
         </Row>

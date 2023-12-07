@@ -1,4 +1,7 @@
-import { Cell } from './types';
+import { CELL_STATUS, Cell } from './types';
+
+const dx = [-1, -1, -1, 0, 0, 1, 1, 1];
+const dy = [-1, 0, 1, -1, 1, -1, 0, 1];
 
 const setMines = (
   board: Cell[][],
@@ -34,9 +37,6 @@ const getSurroundingMineCount = (
   const rows = board.length;
   const columns = board[0].length;
   let mineCount = 0;
-
-  const dx = [-1, -1, -1, 0, 0, 1, 1, 1];
-  const dy = [-1, 0, 1, -1, 1, -1, 0, 1];
 
   for (let i = 0; i < 8; i++) {
     const newRow = row + dx[i];
@@ -83,7 +83,7 @@ export const createBoard = (
           status: 'hidden',
           mine: false,
           count: 0,
-        }) as Cell
+        })!
     )
   );
 
@@ -91,4 +91,56 @@ export const createBoard = (
   board = calculateCounts(board);
 
   return board;
+};
+
+export const openEmptyCells = (
+  board: Cell[][],
+  pos: { row: number; column: number }
+): Cell[][] => {
+  const rows = board.length;
+  const columns = board[0].length;
+  const { row, column } = pos;
+
+  const queue = [{ row, column }];
+
+  while (queue.length) {
+    const { row, column } = queue.shift()!;
+
+    for (let i = 0; i < 8; i++) {
+      const newRow = row + dx[i];
+      const newColumn = column + dy[i];
+
+      if (
+        newRow < 0 ||
+        newRow >= rows ||
+        newColumn < 0 ||
+        newColumn >= columns
+      ) {
+        continue;
+      }
+
+      if (board[newRow][newColumn].status === CELL_STATUS.HIDDEN) {
+        board[newRow][newColumn].status = CELL_STATUS.VISIBLE;
+        if (board[newRow][newColumn].count === 0) {
+          queue.push({ row: newRow, column: newColumn });
+        }
+      }
+    }
+  }
+
+  return board;
+};
+
+export const updateCellStatus = (
+  board: Cell[][],
+  pos: { row: number; column: number }
+): Cell[][] => {
+  const { row, column } = pos;
+
+  if (board[row][column].count !== 0) {
+    board[row][column].status = CELL_STATUS.VISIBLE;
+    return board;
+  }
+
+  return openEmptyCells(board, { row, column });
 };

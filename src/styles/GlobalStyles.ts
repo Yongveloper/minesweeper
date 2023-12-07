@@ -21,10 +21,10 @@ export const GlobalStyles = styled.createGlobalStyle`
     justify-content: center;
     align-items: center;
     user-select: none !important;
-    background-color: #b2bec3;
     cursor: pointer;
     border-width: 2px;
     width: 32px;
     height: 32px;
+    font-weight: bold;
   }
 `;

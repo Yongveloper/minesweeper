@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Cell, GAME_STATUS, GameState, LEVELS } from '../types';
-import { createBoard } from '../utils';
+import { GAME_STATUS, GameState, LEVELS } from '../types';
+import { createBoard, updateCellStatus } from '../utils';
 
 const initialState: GameState = {
   board: Array.from({ length: 8 }, () =>
@@ -11,7 +11,7 @@ const initialState: GameState = {
           status: 'hidden',
           mine: false,
           count: 0,
-        }) as Cell
+        })!
     )
   ),
   gameStatus: 'idle',
@@ -30,7 +30,8 @@ const gameSlice = createSlice({
       state,
       action: PayloadAction<{ level: string; row: number; column: number }>
     ) => {
-      switch (action.payload.level) {
+      const { level, row, column } = action.payload;
+      switch (level) {
         case LEVELS.BEGINNER:
           state.gameLevel = {
             level: LEVELS.BEGINNER,
@@ -70,13 +71,25 @@ const gameSlice = createSlice({
         state.gameLevel.rows,
         state.gameLevel.columns,
         state.gameLevel.mines,
-        { row: action.payload.row, column: action.payload.column }
+        { row, column }
       );
       state.gameStatus = GAME_STATUS.RUNNING;
+      state.board = updateCellStatus(state.board, { row, column });
+    },
+    openCell: (
+      state,
+      action: PayloadAction<{ row: number; column: number }>
+    ) => {
+      const { row, column } = action.payload;
+      if (state.board[row][column].mine) {
+        state.gameStatus = GAME_STATUS.LOST;
+        return;
+      }
+      state.board = updateCellStatus(state.board, { row, column });
     },
   },
 });
 
-export const { setBoard } = gameSlice.actions;
+export const { setBoard, openCell } = gameSlice.actions;
 
 export default gameSlice.reducer;
