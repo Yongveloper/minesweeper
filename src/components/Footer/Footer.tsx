@@ -2,6 +2,7 @@ import { useDispatch } from 'react-redux';
 import * as F from './Footer.styles';
 import { resetGame } from '../../store/gameSlice';
 import { LEVELS } from '../../types';
+import Modal from '../Modal';
 
 // - Beginner (8X8) 지뢰 10개, Intermediate (16X16) 지뢰 40개, Expert (32X16) 지뢰 100개
 // - Custom (가로, 세로, 지뢰 수 조정 가능)
@@ -43,6 +44,7 @@ function Footer() {
           직접 설정
         </button>
       </F.ButtonContainer>
+      <Modal />
     </F.Container>
   );
 }

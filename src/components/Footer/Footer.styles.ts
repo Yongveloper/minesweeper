@@ -16,8 +16,8 @@ export const Container = styled.div`
 `;
 
 export const ButtonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 10px;
   button {
     border: none;
