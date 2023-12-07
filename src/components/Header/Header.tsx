@@ -1,14 +1,12 @@
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useAppSelector } from '../../hooks/useAppSelector';
 import * as H from './Header.styles';
 import { resetGame } from '../../store/gameSlice';
-import { RootState } from '../../store/store';
 import { GAME_STATUS } from '../../types';
 
 function Header() {
-  const gameLevel = useSelector(
-    (state: RootState) => state.game.gameLevel.level
-  );
-  const gameStatus = useSelector((state: RootState) => state.game.gameStatus);
+  const gameLevel = useAppSelector((state) => state.game.gameLevel.level);
+  const gameStatus = useAppSelector((state) => state.game.gameStatus);
   const dispatch = useDispatch();
 
   const handleResetGame = () => {

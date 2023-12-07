@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../store/store';
+import { useDispatch } from 'react-redux';
+import { useAppSelector } from '../../hooks/useAppSelector';
 import { CELL_STATUS, GAME_STATUS } from '../../types';
 import { openCell, startGame } from '../../store/gameSlice';
 
@@ -19,11 +19,9 @@ const Row = styled.div`
 `;
 
 function Board() {
-  const board = useSelector((state: RootState) => state.game.board);
-  const gameStatus = useSelector((state: RootState) => state.game.gameStatus);
-  const gameLevel = useSelector(
-    (state: RootState) => state.game.gameLevel.level
-  );
+  const board = useAppSelector((state) => state.game.board);
+  const gameStatus = useAppSelector((state) => state.game.gameStatus);
+  const gameLevel = useAppSelector((state) => state.game.gameLevel.level);
   const dispatch = useDispatch();
 
   const handleClickCell = (rowIndex: number, cellIndex: number) => {
