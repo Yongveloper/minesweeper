@@ -9,8 +9,8 @@ import {
 import {
   setBoardMinesAndCounts,
   initializeBoard,
-  updateCellStatus,
   checkWin,
+  openEmptyCells,
 } from '../utils';
 
 const lsStorageGameLevel = localStorage.getItem('gameLevel');
@@ -97,7 +97,12 @@ const gameSlice = createSlice({
         state.gameLevel.mines
       );
       state.gameStatus = GAME_STATUS.RUNNING;
-      state.board = updateCellStatus(state.board, { row, column });
+      state.board[row][column].status = CELL_STATUS.VISIBLE;
+
+      if (state.board[row][column].count === 0) {
+        state.board = openEmptyCells(state.board, { row, column });
+      }
+
       if (checkWin(state.board)) {
         state.gameStatus = GAME_STATUS.WON;
       }
@@ -132,7 +137,10 @@ const gameSlice = createSlice({
         return;
       }
 
-      state.board = updateCellStatus(state.board, { row, column });
+      state.board[row][column].status = CELL_STATUS.VISIBLE;
+      if (state.board[row][column].count === 0) {
+        state.board = openEmptyCells(state.board, { row, column });
+      }
 
       if (checkWin(state.board)) {
         state.gameStatus = GAME_STATUS.WON;

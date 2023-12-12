@@ -118,20 +118,6 @@ export const openEmptyCells = (
   return board;
 };
 
-export const updateCellStatus = (
-  board: Cell[][],
-  pos: { row: number; column: number }
-): Cell[][] => {
-  const { row, column } = pos;
-
-  if (board[row][column].count !== 0) {
-    board[row][column].status = CELL_STATUS.VISIBLE;
-    return board;
-  }
-
-  return openEmptyCells(board, { row, column });
-};
-
 export const initializeBoard = (rows: number, columns: number): Cell[][] => {
   return Array.from({ length: rows }, () =>
     Array.from(
