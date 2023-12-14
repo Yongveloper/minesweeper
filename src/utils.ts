@@ -132,6 +132,20 @@ export const initializeBoard = (rows: number, columns: number): Cell[][] => {
   );
 };
 
+export const openAllCells = (board: Cell[][]): Cell[][] => {
+  board.forEach((row) => {
+    row.forEach((cell) => {
+      if (
+        cell.status === CELL_STATUS.HIDDEN ||
+        cell.status === CELL_STATUS.FLAGGED
+      ) {
+        cell.status = CELL_STATUS.VISIBLE;
+      }
+    });
+  });
+  return board;
+};
+
 export const checkWin = (board: Cell[][]): boolean => {
   let win = true;
 
@@ -144,4 +158,59 @@ export const checkWin = (board: Cell[][]): boolean => {
   });
 
   return win;
+};
+
+export const isAreaOpenPossible = (
+  board: Cell[][],
+  count: number,
+  { row, column }: { row: number; column: number }
+): boolean => {
+  const rows = board.length;
+  const columns = board[0].length;
+  let countFlag = 0;
+
+  for (let i = 0; i < 8; i++) {
+    const newRow = row + dx[i];
+    const newColumn = column + dy[i];
+
+    if (newRow < 0 || newRow >= rows || newColumn < 0 || newColumn >= columns) {
+      continue;
+    }
+
+    if (board[newRow][newColumn].status === CELL_STATUS.FLAGGED) {
+      countFlag++;
+    }
+
+    if (countFlag > count) {
+      return false;
+    }
+  }
+
+  return countFlag === count;
+};
+
+export const openSurroundingCells = (
+  board: Cell[][],
+  { row, column }: { row: number; column: number }
+): boolean => {
+  const rows = board.length;
+  const columns = board[0].length;
+
+  for (let i = 0; i < 8; i++) {
+    const newRow = row + dx[i];
+    const newColumn = column + dy[i];
+
+    if (newRow < 0 || newRow >= rows || newColumn < 0 || newColumn >= columns) {
+      continue;
+    }
+
+    if (board[newRow][newColumn].status === CELL_STATUS.HIDDEN) {
+      if (board[newRow][newColumn].mine) {
+        return false;
+      }
+      board[newRow][newColumn].status = CELL_STATUS.VISIBLE;
+    }
+  }
+
+  return true;
 };

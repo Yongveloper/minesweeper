@@ -11,6 +11,9 @@ import {
   initializeBoard,
   checkWin,
   openEmptyCells,
+  isAreaOpenPossible,
+  openAllCells,
+  openSurroundingCells,
 } from '../utils';
 
 const lsStorageGameLevel = localStorage.getItem('gameLevel');
@@ -124,16 +127,7 @@ const gameSlice = createSlice({
 
       if (cell.mine) {
         state.gameStatus = GAME_STATUS.LOST;
-        state.board.forEach((row) => {
-          row.forEach((cell) => {
-            if (
-              cell.status === CELL_STATUS.HIDDEN ||
-              cell.status === CELL_STATUS.FLAGGED
-            ) {
-              cell.status = CELL_STATUS.VISIBLE;
-            }
-          });
-        });
+        openAllCells(state.board);
         return;
       }
 
@@ -150,7 +144,7 @@ const gameSlice = createSlice({
       state.gameStatus = action.payload;
     },
     toggleFlag: (
-      state,
+      state: GameState,
       action: PayloadAction<{ row: number; column: number }>
     ) => {
       const { row, column } = action.payload;
@@ -165,10 +159,42 @@ const gameSlice = createSlice({
           ? CELL_STATUS.HIDDEN
           : CELL_STATUS.FLAGGED;
     },
+    areaOpen(
+      state: GameState,
+      action: PayloadAction<{ row: number; column: number }>
+    ) {
+      const { row, column } = action.payload;
+      const cell = state.board[row][column];
+
+      if (cell.status !== CELL_STATUS.VISIBLE && cell.count === 0) {
+        return;
+      }
+
+      if (!isAreaOpenPossible(state.board, cell.count, { row, column })) {
+        return;
+      }
+
+      if (!openSurroundingCells(state.board, { row, column })) {
+        // area open 중 지뢰가 오픈된 경우
+        state.gameStatus = GAME_STATUS.LOST;
+        openAllCells(state.board);
+        return;
+      }
+
+      if (checkWin(state.board)) {
+        state.gameStatus = GAME_STATUS.WON;
+      }
+    },
   },
 });
 
-export const { resetGame, startGame, openCell, setGameStatus, toggleFlag } =
-  gameSlice.actions;
+export const {
+  resetGame,
+  startGame,
+  openCell,
+  setGameStatus,
+  toggleFlag,
+  areaOpen,
+} = gameSlice.actions;
 
 export default gameSlice.reducer;
