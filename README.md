@@ -2,7 +2,7 @@
 
 지뢰찾기 게임
 
-- 배포: https://minesweeper-yhj.netlify.app/
+- [배포 링크](https://minesweeper-sage.vercel.app/)
 
 ## 기능 구현
 
