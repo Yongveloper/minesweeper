@@ -2,16 +2,18 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '@/hooks/useAppSelector';
 import { areaOpen, openCell, startGame, toggleFlag } from '@/store/gameSlice';
-import { CELL_STATUS, Cell as CellType, GAME_STATUS } from '@/types';
+import { CELL_STATUS, CellStatus, GAME_STATUS } from '@/types';
 import * as C from './Cell.styles';
 
 interface ICellProps {
   row: number;
   column: number;
-  cell: CellType;
+  status: CellStatus;
+  mine: boolean;
+  count: number;
 }
 
-function Cell({ row, column, cell }: ICellProps) {
+const Cell = ({ row, column, status, mine, count }: ICellProps) => {
   const [mouseDown, setMouseDown] = useState(0);
   const dispatch = useDispatch();
   const gameStatus = useAppSelector((state) => state.game.gameStatus);
@@ -50,18 +52,18 @@ function Cell({ row, column, cell }: ICellProps) {
 
   return (
     <C.Cell
-      $isOpen={cell.status === CELL_STATUS.VISIBLE}
-      $isMine={cell.mine}
+      $isOpen={status === CELL_STATUS.VISIBLE}
+      $isMine={mine}
       onClick={handleClick}
       onContextMenu={handleRightClick}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
     >
-      {cell.status === CELL_STATUS.FLAGGED && '🚩'}
-      {cell.status === CELL_STATUS.VISIBLE && cell.mine && '💣'}
-      {cell.status === CELL_STATUS.VISIBLE && cell.count > 0 && cell.count}
+      {status === CELL_STATUS.FLAGGED && '🚩'}
+      {status === CELL_STATUS.VISIBLE && mine && '💣'}
+      {status === CELL_STATUS.VISIBLE && count > 0 && count}
     </C.Cell>
   );
-}
+};
 
 export default React.memo(Cell);
